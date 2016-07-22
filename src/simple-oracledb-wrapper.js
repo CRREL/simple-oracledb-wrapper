@@ -18,7 +18,12 @@ function createPool(options, callback){
     process.env['TNS_ADMIN'] = options.tnsPath;
   }
 
-  oracledb = require('oracledb');
+  try{
+    oracledb = require('oracledb');
+  }catch(){
+    var prequire = require('parent-require')
+    oracledb = prequire('oracledb');
+  }
 
   oracledb.createPool({
     user          : username,

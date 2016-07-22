@@ -7,8 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "node-oracle", "oracledb"
+    "node-oracle",
+    "oracledb"
   ],
   "author": "willbreitkreutz",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "parent-require": "^1.0.0"
+  }
 }
