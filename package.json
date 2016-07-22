@@ -11,8 +11,5 @@
     "oracledb"
   ],
   "author": "willbreitkreutz",
-  "license": "MIT",
-  "dependencies": {
-    "parent-require": "^1.0.0"
-  }
+  "license": "MIT"
 }

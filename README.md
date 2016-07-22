@@ -11,11 +11,11 @@ This works well for simple small transactions, if you need more complicated tran
 
 1. Installation
 
-  I'm not pushing this to NPM just yet, but you can `npm install` at your convenience by referencing this here GitHub repo, check out the sweet installation command below:
+  So I haven't gotten the dependency stuff figured out yet so that you can npm install the module, but you can use it as-is.
 
-  ```
-  > npm install crrel/simple-oracledb-wrapper --save
-  ```
+  Do a `git clone https://github.com/CRREL/simple-oracledb-wrapper.git` into your project dirctory (not into node_modules).
+
+  Then from your main project script, you can require('./simple-oracledb-wrapper') pointing to the folder that you just downloaded from GitHub.
 
 2. Start up the pool!
 
