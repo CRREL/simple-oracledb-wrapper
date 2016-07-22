@@ -11,7 +11,7 @@ function createPool(options, callback){
   if(username === '' || password === '' || connectString === '') return callback({"msg": "Must provide database credentials and connection info to use this module"});
 
   if(options.instantClientPath){
-    process.env['PATH'] = options.instantClientPath + process.env['PATH'];
+    process.env['PATH'] = options.instantClientPath + ';' + process.env['PATH'];
   }
 
   if(options.tnsPath){
