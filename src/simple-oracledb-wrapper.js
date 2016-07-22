@@ -1,4 +1,4 @@
-var oracledb = require('oracledb');
+var oracledb;
 var enflate = require('./enflate-node-oracle-rows');
 var connectionPool;
 
@@ -17,6 +17,8 @@ function createPool(options, callback){
   if(options.tnsPath){
     process.env['TNS_ADMIN'] = options.tnsPath;
   }
+
+  oracledb = require('oracledb');
 
   oracledb.createPool({
     user          : username,
