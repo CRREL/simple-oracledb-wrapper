@@ -2,6 +2,26 @@ var oracledb;
 var enflate = require('./enflate-node-oracle-rows');
 var connectionPool;
 
+function testConnection(callback){
+  var sql = "select sysdate from dual";
+  var pool = getPool()
+  console.log(process.env['TNS_ADMIN'])
+  pool.getConnection(function(err, connection){
+    if(err){
+      console.log(new Date(), 'Cant get connection', err)
+    }
+  })
+  select(sql, [], function(err, result){
+    if(err){
+      console.log(new Date(), 'Error testing connection', err)
+      return callback(err);
+    }else{
+      console.log('database connected, today is', result[0].sysdate)
+      return callback();
+    }
+  })
+}
+
 function createPool(options, callback){
 
   var username = options.username || '';
@@ -25,9 +45,14 @@ function createPool(options, callback){
     password      : password,
     connectString : connectString
   }, function(err, pool){
-    if(err) callback(err);
-    connectionPool = pool;
-    callback();
+    if(err){
+      console.log('Error creating pool - SOW:42', err)
+      return callback(err);
+    }else{
+      console.log('Connection Pool created successfully')
+      connectionPool = pool;
+      return callback();
+    }
   })
 }
 
@@ -98,3 +123,4 @@ module.exports.createPool = createPool;
 module.exports.getPool = getPool;
 module.exports.select = select;
 module.exports.execute = execute;
+module.exports.testConnection = testConnection;
