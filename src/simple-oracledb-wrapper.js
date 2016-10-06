@@ -5,7 +5,6 @@ var connectionPool;
 function testConnection(callback){
   var sql = "select sysdate from dual";
   var pool = getPool()
-  console.log(process.env['TNS_ADMIN'])
   pool.getConnection(function(err, connection){
     if(err){
       console.log(new Date(), 'Cant get connection', err)
