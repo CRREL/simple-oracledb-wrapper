@@ -118,8 +118,66 @@ function execute(sql, args, callback){
   })
 }
 
+function _closeConnection(connection){
+  connection.close(function(err){
+    if(err) console.log(err.message);
+  })
+}
+
+function _releaseRSandConnection(connection, resultSet){
+  resultSet.close(function(err){
+    if(err) console.log(err.message);
+    _closeConnection(connection);
+  })
+}
+
+function stream(sql, args, numRows, callback){
+  var pool = getPool();
+  pool.getConnection(function(err, connection){
+    if(err){
+      return callback(err);
+    }else{
+      connection.execute(sql, args, { resultSet: true }, function(err, result){
+        if(err){
+          connection.release(function(err){
+            if(err) return callback(err);
+          })
+          return callback(err);
+        }else{
+          _fetchRowsFromRs(connection, result.resultSet, numRows, callback);
+        }
+      })
+    }
+  })
+}
+
+function _fetchRowsFromRs(connection, resultSet, numRows, callback){
+  resultSet.getRows(numRows, function(err, rows){
+    if(err){
+      return callback(err);
+    }else if(rows.length > 0){
+      var data = enflate({
+        metaData: resultSet.metaData,
+        rows: rows
+      }, {
+        camelCase: true
+      })
+      callback(null, data);
+      if(rows.length === numRows){
+        _fetchRowsFromRs(connection, resultSet, numRows, callback);
+      }else{
+        _releaseRSandConnection(connection, resultSet);
+      }
+    }else{
+      callback(null, []);
+      _releaseRSandConnection(connection, resultSet);
+    }
+  })
+}
+
 module.exports.createPool = createPool;
 module.exports.getPool = getPool;
 module.exports.select = select;
+module.exports.stream = stream;
 module.exports.execute = execute;
 module.exports.testConnection = testConnection;
